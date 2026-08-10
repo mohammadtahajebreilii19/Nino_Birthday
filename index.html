@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>یه سورپرایز کوچیک 🤭</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
+body{
+    font-family:Tahoma,Arial,sans-serif;
+    background:#0d0b16;
+    color:white;
+}
+
+.screen{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:22px;
+    opacity:0;
+    pointer-events:none;
+    transform:scale(1.03);
+    transition:.65s ease;
+}
+
+.screen.active{
+    opacity:1;
+    pointer-events:auto;
+    transform:scale(1);
+}
+
+.card{
+    width:min(92vw,560px);
+    padding:38px 28px;
+    border-radius:28px;
+    background:rgba(255,255,255,.09);
+    border:1px solid rgba(255,255,255,.15);
+    box-shadow:0 20px 80px rgba(0,0,0,.45);
+    backdrop-filter:blur(18px);
+    text-align:center;
+}
+
+h1{
+    font-size:clamp(27px,7vw,48px);
+    margin:0 0 18px;
+}
+
+p{
+    font-size:18px;
+    line-height:2;
+    color:#ddd;
+}
+
+button{
+    border:0;
+    border-radius:999px;
+    padding:15px 30px;
+    font-size:18px;
+    font-family:inherit;
+    cursor:pointer;
+    transition:.25s ease;
+}
+
+.yes{
+    background:#ff4f9a;
+    color:white;
+    box-shadow:0 10px 35px rgba(255,79,154,.3);
+}
+
+.no{
+    background:#eee;
+    color:#222;
+}
+
+.buttons{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+.small{
+    font-size:14px;
+    color:#aaa;
+}
+
+#s1{
+    background:radial-gradient(circle at 50% 40%,#3b174b,#0d0b16 65%);
+}
+
+#s2{
+    background:radial-gradient(circle at 50% 35%,#40153b,#0d0b16 68%);
+}
+
+#s3{
+    background:radial-gradient(circle at 50% 35%,#3d1b50,#0d0b16 68%);
+}
+
+#s4{
+    background:radial-gradient(circle at 50% 35%,#5a1744,#0d0b16 70%);
+}
+
+.cake{
+    font-size:75px;
+    animation:float 2.4s ease-in-out infinite;
+}
+
+@keyframes float{
+    50%{
+        transform:translateY(-9px);
+    }
+}
+
+.next{
+    margin-top:22px;
+    background:white;
+    color:#222;
+    display:none;
+}
+
+.next.show{
+    display:inline-block;
+}
+
+.count{
+    font-size:64px;
+    font-weight:bold;
+}
+
+.message{
+    font-size:clamp(24px,7vw,42px);
+    font-weight:bold;
+    line-height:1.8;
+    animation:pop .65s ease;
+}
+
+@keyframes pop{
+    from{
+        opacity:0;
+        transform:scale(.6);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+.heart{
+    position:fixed;
+    pointer-events:none;
+    font-size:24px;
+    animation:rise 3s linear forwards;
+}
+
+@keyframes rise{
+    to{
+        transform:translateY(-100vh) rotate(25deg);
+        opacity:0;
+    }
+}
+
+.micbar{
+    height:8px;
+    width:min(320px,80vw);
+    margin:18px auto 6px;
+    background:rgba(255,255,255,.12);
+    border-radius:20px;
+    overflow:hidden;
+    display:none;
+}
+
+.micbar i{
+    display:block;
+    height:100%;
+    width:0;
+    background:#ff4f9a;
+    transition:.08s;
+}
+
+.micstatus{
+    font-size:14px;
+    color:#bbb;
+    min-height:24px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- مرحله اول -->
+<section id="s1" class="screen active">
+
+    <div class="card">
+
+        <div style="font-size:55px">
+            🎁
+        </div>
+
+        <h1>
+            یه سؤال مهم...
+        </h1>
+
+        <p>
+            آیا امروز تولد شماست؟ 👀
+        </p>
+
+        <div class="buttons">
+
+            <button class="yes" id="birthdayYes">
+                بله 😌
+            </button>
+
+            <button class="no" id="birthdayNo">
+                خیر
+            </button>
+
+        </div>
+
+        <p id="wrong" class="small" style="display:none">
+            مطمئنی؟ این سایت یه چیز دیگه میگه 😂
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- مرحله تولد -->
+<section id="s2" class="screen">
+
+    <div class="card">
+
+        <div id="cakeScene">
+
+            <div class="cake" id="cake">
+                🎂
+            </div>
+
+            <div id="flames"
+                 style="font-size:28px;letter-spacing:7px;margin-top:-8px">
+
+                🕯️🕯️🕯️
+
+            </div>
+
+        </div>
+
+
+        <h1 id="birthdayTitle">
+            HAPPY BIRTHDAY 🎉
+        </h1>
+
+
+        <p id="songText">
+            آماده‌ای؟ یه سورپرایز کوچولو فقط برای تو... 🤍
+        </p>
+
+
+        <div id="countdown"
+             class="count"
+             style="font-size:64px;font-weight:bold;margin:8px">
+
+            3
+
+        </div>
+
+
+        <button id="blow" class="next">
+            🎙️ اجازه استفاده از میکروفون
+        </button>
+
+
+        <div id="micbar" class="micbar">
+
+            <i id="micfill"></i>
+
+        </div>
+
+
+        <div id="micstatus" class="micstatus">
+
+            با زدن دکمه، پنجره اجازه میکروفون باز می‌شود.
+
+        </div>
+
+
+        <button id="micRetry"
+                class="next"
+                style="display:none">
+
+            دوباره تلاش کن 🎙️
+
+        </button>
+
+
+        <button id="next1" class="next">
+
+            بریم مرحله بعدی 😈
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- سؤال علاقه -->
+<section id="s3" class="screen">
+
+    <div class="card">
+
+        <div style="font-size:65px">
+            👀
+        </div>
+
+        <h1>
+            حالا یه سؤال دیگه...
+        </h1>
+
+        <p>
+            آیا به من علاقه داری؟ 🤭
+        </p>
+
+        <div class="buttons" id="loveButtons">
+
+            <button class="yes" id="loveYes">
+                آره ❤️
+            </button>
+
+            <button class="no" id="loveNo">
+                نه 😏
+            </button>
+
+        </div>
+
+        <p id="hint" class="small">
+            یه گزینه رو باید انتخاب کنی...
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- پایان -->
+<section id="s4" class="screen">
+
+    <div class="card">
+
+        <div class="small"
+             style="letter-spacing:4px;margin-bottom:12px">
+
+            JUST FOR YOU
+
+        </div>
+
+
+        <div style="font-size:70px">
+            🥹❤️
+        </div>
+
+
+        <div class="message">
+
+            از کیه شیطون؟<br>
+
+            منم بهت علاقه دارم 🤭❤️
+
+        </div>
+
+
+        <p>
+
+            خب حالا ک لو رفت 😂😭<br>
+
+            تولد مبارک نینوی دوست داشتنی 💗<br>
+
+            ایشالا همه آرزوهات برسی و خاطره شن 🍻🎂<br>
+
+            مخصوصن منن🤭
+
+        </p>
+
+    </div>
+
+</section>
+
+
+<script>
+
+const $ = id => document.getElementById(id);
+
+
+function go(id){
+
+    document
+        .querySelectorAll('.screen')
+        .forEach(x => x.classList.remove('active'));
+
+    $(id).classList.add('active');
+
+}
+
+
+function wait(ms){
+
+    return new Promise(resolve => setTimeout(resolve,ms));
+
+}
+
+
+/* موزیک کوتاه تولد */
+
+function playBirthdayMelody(){
+
+    const AC =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+    if(!AC) return;
+
+    const ac = new AC();
+
+    const notes = [
+
+        [264,.28],
+        [264,.28],
+        [297,.55],
+        [264,.55],
+        [352,.55],
+        [330,.85],
+
+        [264,.28],
+        [264,.28],
+        [297,.55],
+        [264,.55],
+        [396,.55],
+        [352,.85]
+
+    ];
+
+    let t = ac.currentTime + .08;
+
+
+    notes.forEach(([freq,dur]) => {
+
+        const o = ac.createOscillator();
+        const g = ac.createGain();
+
+        o.type = 'sine';
+        o.frequency.value = freq;
+
+        g.gain.setValueAtTime(.0001,t);
+
+        g.gain.exponentialRampToValueAtTime(
+            .12,
+            t+.03
+        );
+
+        g.gain.exponentialRampToValueAtTime(
+            .0001,
+            t+dur-.03
+        );
+
+        o.connect(g);
+        g.connect(ac.destination);
+
+        o.start(t);
+        o.stop(t+dur);
+
+        t += dur;
+
+    });
+
+
+    setTimeout(
+        () => ac.close(),
+        (t-ac.currentTime+1)*1000
+    );
+
+}
+
+
+/* قلب باران */
+
+function heartRain(){
+
+    for(let i=0;i<25;i++){
+
+        setTimeout(() => {
+
+            const h =
+                document.createElement('div');
+
+            h.className='heart';
+
+            h.textContent =
+                ['❤️','💗','💕','✨','💖']
+                [Math.floor(Math.random()*5)];
+
+            h.style.left =
+                Math.random()*100+'vw';
+
+            h.style.bottom='-30px';
+
+            h.style.animationDuration =
+                (2+Math.random()*2)+'s';
+
+            document.body.appendChild(h);
+
+            setTimeout(
+                () => h.remove(),
+                4000
+            );
+
+        },i*90);
+
+    }
+
+}
+
+
+/* اگر خیر را زد */
+
+$('birthdayNo').onclick = () => {
+
+    $('wrong').style.display='block';
+
+    $('birthdayNo').style.transform =
+        'scale(.9)';
+
+};
+
+
+/* شروع تولد */
+
+$('birthdayYes').onclick = async () => {
+
+    go('s2');
+
+    playBirthdayMelody();
+
+    $('next1').classList.remove('show');
+
+    $('blow').classList.remove('show');
+
+    $('flames').style.opacity='1';
+
+    $('songText').textContent =
+        'خب... آماده‌ای؟ 🤭';
+
+    $('birthdayTitle').textContent =
+        'یه آرزو کن... ✨';
+
+
+    const c = $('countdown');
+
+
+    for(const n of ['3','2','1']){
+
+        c.textContent=n;
+
+        c.style.animation='none';
+
+        void c.offsetWidth;
+
+        c.style.animation='pop .45s ease';
+
+        await wait(900);
+
+    }
+
+
+    c.textContent='🎂';
+
+    $('songText').textContent =
+        'حالا فوت کنننن! 💨🕯️';
+
+    $('blow').classList.add('show');
+
+};
+
+
+/* متغیرهای میکروفون */
+
+let micStream = null;
+
+let audioCtx = null;
+
+let analyser = null;
+
+let micData = null;
+
+let blowing = false;
+
+let blowStarted = 0;
+
+
+/* درخواست دسترسی میکروفون */
+
+async function startMic(){
+
+    const status =
+        $('micstatus');
+
+    const retry =
+        $('micRetry');
+
+    retry.style.display='none';
+
+
+    if(
+        !window.isSecureContext ||
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia
+    ){
+
+        status.innerHTML =
+            'برای استفاده از میکروفون، سایت باید با <b>HTTPS</b> اجرا شود.';
+
+        retry.style.display='inline-block';
+
+        return;
+
+    }
+
+
+    try{
+
+        status.textContent =
+            'الان باید پنجره اجازه میکروفون روی صفحه بیاد... 🎙️';
+
+
+        micStream =
+            await navigator.mediaDevices.getUserMedia({
+
+                audio:{
+
+                    echoCancellation:true,
+
+                    noiseSuppression:true,
+
+                    autoGainControl:true
+
+                }
+
+            });
+
+
+        audioCtx =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+
+        if(audioCtx.state === 'suspended'){
+
+            await audioCtx.resume();
+
+        }
+
+
+        const source =
+            audioCtx.createMediaStreamSource(
+                micStream
+            );
+
+
+        analyser =
+            audioCtx.createAnalyser();
+
+        analyser.fftSize=1024;
+
+        analyser.smoothingTimeConstant=.55;
+
+        source.connect(analyser);
+
+
+        micData =
+            new Uint8Array(
+                analyser.fftSize
+            );
+
+
+        $('blow').style.display='none';
+
+        $('micbar').style.display='block';
+
+
+        status.textContent =
+            'عالیه! میکروفون فعاله؛ حالا نزدیک گوشی فوت کن 💨';
+
+
+        detectBlow();
+
+    }
+
+    catch(e){
+
+        if(e.name === 'NotAllowedError'){
+
+            status.innerHTML =
+                'دسترسی میکروفون رد شد. از تنظیمات مرورگر، <b>Microphone → Allow</b> را فعال کن و دوباره بزن.';
+
+        }
+
+        else{
+
+            status.textContent =
+                'نتونستم میکروفون رو فعال کنم؛ دوباره تلاش کن 🎙️';
+
+        }
+
+
+        retry.style.display='inline-block';
+
+    }
+
+}
+
+
+/* تشخیص فوت */
+
+async function detectBlow(){
+
+    if(blowing || !analyser)
+        return;
+
+
+    analyser.getByteTimeDomainData(
+        micData
+    );
+
+
+    let sum=0;
+
+
+    for(
+        let i=0;
+        i<micData.length;
+        i++
+    ){
+
+        const x =
+            (micData[i]-128)/128;
+
+        sum += x*x;
+
+    }
+
+
+    const rms =
+        Math.sqrt(
+            sum/micData.length
+        );
+
+
+    const level =
+        Math.min(
+            100,
+            rms*330
+        );
+
+
+    $('micfill').style.width =
+        level+'%';
+
+
+    if(level>38){
+
+        if(!blowStarted)
+            blowStarted =
+                performance.now();
+
+
+        if(
+            performance.now()-blowStarted
+            >260
+        ){
+
+            blowing=true;
+
+            await extinguishCandles();
+
+            return;
+
+        }
+
+    }
+
+    else{
+
+        blowStarted=0;
+
+    }
+
+
+    requestAnimationFrame(
+        detectBlow
+    );
+
+}
+
+
+/* خاموش شدن شمع */
+
+async function extinguishCandles(){
+
+    $('songText').textContent =
+        'فوووووتتت 💨💨💨';
+
+
+    $('micstatus').textContent =
+        'گرفتت! 😭😂';
+
+
+    $('flames').style.transition =
+        'opacity .18s ease, transform .18s ease';
+
+
+    $('flames').style.transform =
+        'scale(.65)';
+
+
+    $('flames').style.opacity='0';
+
+
+    await wait(1100);
+
+
+    $('songText').textContent =
+        'آرزوت رو کردی؟ 🤍';
+
+
+    await wait(1300);
+
+
+    $('countdown').textContent='✨';
+
+
+    $('micbar').style.display='none';
+
+
+    $('next1').classList.add('show');
+
+
+    if(micStream){
+
+        micStream
+            .getTracks()
+            .forEach(t => t.stop());
+
+    }
+
+
+    if(audioCtx){
+
+        audioCtx.close();
+
+    }
+
+}
+
+
+/* دکمه فعال کردن میکروفون */
+
+$('blow').onclick =
+    startMic;
+
+
+$('micRetry').onclick =
+    startMic;
+
+
+/* مرحله بعد */
+
+$('next1').onclick = () => {
+
+    go('s3');
+
+};
+
+
+/* سؤال علاقه */
+
+let yesScale=1;
+
+
+$('loveNo').onclick = () => {
+
+    yesScale += .28;
+
+
+    $('loveYes').style.transform =
+        `scale(${yesScale})`;
+
+
+    $('loveYes').style.padding =
+        `${15+yesScale*3}px ${30+yesScale*6}px`;
+
+
+    $('hint').textContent =
+        'نه؟ 😐 دوباره فکر کن...';
+
+
+    $('loveNo').style.transform =
+        `scale(${Math.max(
+            .55,
+            1-(yesScale-1)*.18
+        )})`;
+
+};
+
+
+/* جواب بله */
+
+$('loveYes').onclick = () => {
+
+    go('s4');
+
+    heartRain();
+
+};
+
+</script>
+
+</body>
+</html>
